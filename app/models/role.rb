@@ -2,26 +2,25 @@ class Role < ActiveRecord::Base
     has_many :auditions
 
     def actors
-        auditions.actor.pluck :name
+        self.auditions.pluck :actor
     end
 
     def locations
-        auditions.locations.pluck :location
+        self.auditions.pluck :location
     end
 
     def lead
-        if self.find_by(true)
-            auditions.actor
-        else 
-            puts "no actor has been hired for this role"
-        end
+        found = self.auditions.find_by(hired: true)
+        return 'no actor has been hired for this role' unless found
+        found
     end
 
     def understudy
-        if self.scan(true).count == 1
-            auditions.actor
-        else 
-            puts "no actor has been hired for understudy for this role"
-        end
+        second = self.auditions.where(hired: true)[1]
+        # second = self.auditions.where(hired: true).second
+        # can also use ternary
+        # EX. second ? second : 'no actor has been hired for understudy for this role'
+        return  'no actor has been hired for understudy for this role' unless second
+        second
     end
 end

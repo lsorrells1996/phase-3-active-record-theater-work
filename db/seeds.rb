@@ -13,7 +13,8 @@ end
         location: Faker::Address.city,
         phone: Faker::PhoneNumber.phone_number,
         hired: [true, false].sample,
-        role: Role.all.sample
+        role: Role.pluck
+        #role: Role.all.sample
     )
 end
 
